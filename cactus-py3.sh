@@ -1,9 +1,12 @@
 #!/bin/bash
-sudo apt update && sudo apt install ccache
+sudo apt update && sudo apt install ccache python3 python3-pip
+python3 -m pip install configparser
+alias python="python3"
 # Export
-export device="cereus"
+export device="cactus"
 source config.sh
-
+zip_name+="-py3"
+export zip_name
 function sync(){
 	SYNC_START=$(date +"%s")
 	curl -v -F "chat_id=$TELEGRAM_CHAT" -F "parse_mode=html" -F text="Sync Started" https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage
@@ -19,8 +22,8 @@ function build(){
 	cd "$KERNEL_DIR"
 	export last_tag=$(git log -1 --oneline)
 	curl -v -F "chat_id=$TELEGRAM_CHAT" -F "parse_mode=html" -F text="Build Started" https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage > /dev/null
-	make  O=out "$device"_defconfig "$THREAD" > "$KERNEL_DIR"/kernel.log
-	make "$THREAD" O=out >> "$KERNEL_DIR"/kernel.log
+	make  O=out "$device"_defconfig "$THREAD" > "$KERNEL_DIR"/kernel-py3.log
+	make "$THREAD" O=out >> "$KERNEL_DIR"/kernel-py3.log
 	BUILD_END=$(date +"%s")
 	BUILD_DIFF=$((BUILD_END - BUILD_START))
 	export BUILD_DIFF
@@ -35,7 +38,8 @@ function release(){
 }
 function success(){
 	release
-	curl -v -F "chat_id=$TELEGRAM_CHAT" -F "parse_mode=html" -F "text=Build completed successfully in $((BUILD_DIFF / 60)):$((BUILD_DIFF % 60))
+	curl -v -F "chat_id=$TELEGRAM_CHAT" -F "parse_mode=html" -F "text=#EXPERIMENTAL #py3
+Build completed successfully in $((BUILD_DIFF / 60)):$((BUILD_DIFF % 60))
 Dev : ""$KBUILD_BUILD_USER""
 Product : Kernel
 Device : #""$device""
@@ -46,11 +50,12 @@ Compiler : ""$(${CROSS_COMPILE}gcc --version | head -n 1)""
 Date : ""$(env TZ=Asia/Jakarta date)""
 Download: <a href='https://github.com/""$release_repo""/releases/download/""$tag""/""$zip_name"".zip'>""$zip_name"".zip</a>" https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage
 	
-	curl -v -F "chat_id=$TELEGRAM_CHAT" -F document=@"$KERNEL_DIR"/kernel.log https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument > /dev/null
+	curl -v -F "chat_id=$TELEGRAM_CHAT" -F document=@"$KERNEL_DIR"/kernel-py3.log https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument > /dev/null
 	exit 0
 }
 function failed(){
-	curl -v -F "chat_id=$TELEGRAM_CHAT" -F document=@"$KERNEL_DIR"/kernel.log -F "parse_mode=html" -F "caption=Build failed in $((BUILD_DIFF / 60)):$((BUILD_DIFF % 60))" https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument > /dev/null
+	curl -v -F "chat_id=$TELEGRAM_CHAT" -F document=@"$KERNEL_DIR"/kernel-py3.log -F "parse_mode=html" -F "caption=Build failed in $((BUILD_DIFF / 60)):$((BUILD_DIFF % 60))
+#py3" https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument > /dev/null
 	exit 1
 }
 function check_build(){

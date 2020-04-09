@@ -1,4 +1,4 @@
-![Cactus Badges](https://img.shields.io/github/workflow/status/wulan17/android_kernel_xiaomi_mt6765/Cactus?label=cactus&style=for-the-badge) ![Cereus Badges](https://img.shields.io/github/workflow/status/wulan17/android_kernel_xiaomi_mt6765/Cereus?label=cereus&style=for-the-badge) [![Downloads](https://img.shields.io/github/downloads/wulan17/kernel_build/total?style=for-the-badge)](https://github.com/wulan17/kernel_build/releases)
+![Python2 Badges](https://img.shields.io/github/workflow/status/wulan17/android_kernel_xiaomi_mt6765/Cactus/dev/py3?label=Python%202&style=for-the-badge) ![Python3 Badges](https://img.shields.io/github/workflow/status/wulan17/android_kernel_xiaomi_mt6765/Cactus_py3/dev/py3?label=Python%203&style=for-the-badge) [![Downloads](https://img.shields.io/github/downloads/wulan17/kernel_build/total?style=for-the-badge)](https://github.com/wulan17/kernel_build/releases)
 
         Linux kernel release 4.x <http://kernel.org/>
 

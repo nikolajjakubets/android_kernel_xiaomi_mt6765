@@ -1,17 +1,17 @@
-name: Cereus
+name: Cactus_py3
 
 on: push
 
 jobs:
   build:
-    name: Cereus;
+    name: Cactus_py3;
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: Build Kernel
       run: |
-        chmod a+x ./cereus.sh
-        ./cereus.sh
+        chmod a+x ./cactus-py3.sh
+        ./cactus-py3.sh
       shell: bash
       env:
         TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }} 
